@@ -1,1 +1,97 @@
-Empty
+pedro :-
+    write('? '), read_word_list(Input), pedro(Input), !.
+
+pedro([bye]) :-
+    write('Gracias por ordenar, :D'), nl.
+pedro(Input) :-
+    pattern(Stimulus, Response),
+    match(Stimulus, Dictionary, Input),
+    match(Response, Dictionary, Output),
+    reply(Output),
+    !, pedro.
+
+match([N|Pattern], Dictionary, Target) :-
+    integer(N), lookup(N, Dictionary, LeftTarget),
+    append(LeftTarget, RightTarget, Target),
+    match(Pattern, Dictionary, RightTarget).
+match([Word | Pattern], Dictionary, [Word | Target]) :-
+    atom(Word), match(Pattern, Dictionary, Target).
+match([], _Dictionary, []).
+/*i am tired
+[i,am,so,tired]
+[i,am,1]
+1 = so,tired*/
+
+pattern([X,1],['Consultoria','de','aceites,,','Desea','realizar','una','consulta']):-saludo(X).
+patter([si],['cual','es','el','año','del','modelo','de','su','veiculo?']).
+pattern([X],[]).
+
+
+
+
+saludo(hola).
+saludo(buenas).
+saludo(buenos).
+
+tipo(sintetico).
+tipo(semi-sintetico).
+tipo(alto_kilometraje).
+tipo(monogrado).
+
+monogrado('SAE_10').
+monogrado('SAE_20').
+monogrado('SAE_30').
+monogrado('SAE_40').
+
+multigrado('SAE_5W-30').
+multigrado('SAE_10W-40').
+multigrado('SAE_15W-40').
+
+gasolina('S').
+dicel('C').
+
+api('J').
+api('L').
+api('M').
+api('N').
+api('N_plus').
+
+año('N_PLUS',2021).
+año('N_PLUS',2020).
+año('N_PLUS',2019).
+año('N_PLUS',2018).
+año('N',2017).
+año('N',2016).
+año('N',2015).
+año('N',2014).
+año('N',2013).
+año('N',2012).
+año('N',2011).
+año('M',2010).
+año('M',2009).
+año('M',2008).
+año('M',2007).
+año('M',2006).
+año('M',2005).
+año('M',2004).
+año('L',2003).
+año('L',2002).
+año('L',2001).
+año('J',2000).
+año('J',1999).
+año('J',1998).
+año('J',1997).
+año('J',1996).
+
+reply([Head | Tail]) :-
+    write(Head), write(' '), reply(Tail).
+reply([]) :- nl.
+
+lookup(Key, [(Key, Value) | _Dict], Value).
+lookup(Key, [(Key1, _Val1) | Dictionary], Value) :-
+    Key \= Key1, lookup(Key, Dictionary, Value).
+
+read_word_list(Ws) :-
+    read_line_to_codes(user_input, Cs),
+    atom_codes(A, Cs),
+    tokenize_atom(A, Ws).
